@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Schema", "Schema\Schema.vcxproj", "{DE6082C7-6C0D-4CA9-BC68-65B4E90080FA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE6082C7-6C0D-4CA9-BC68-65B4E90080FA}.Debug|x64.ActiveCfg = Debug|x64
+		{DE6082C7-6C0D-4CA9-BC68-65B4E90080FA}.Debug|x64.Build.0 = Debug|x64
+		{DE6082C7-6C0D-4CA9-BC68-65B4E90080FA}.Release|x64.ActiveCfg = Release|x64
+		{DE6082C7-6C0D-4CA9-BC68-65B4E90080FA}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {376820A8-D2B7-496E-8D77-F52F74E38732}
+	EndGlobalSection
+EndGlobal

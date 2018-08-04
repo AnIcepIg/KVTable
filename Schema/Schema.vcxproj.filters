@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{2e72bdb9-b67e-4f73-aeb9-af46f9a6969f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{e762ad8d-b623-469a-970b-0a41a2e54e28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zlib">
+      <UniqueIdentifier>{a8378087-b399-4c03-8033-8429e56c025e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\bittwiddle.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\codeflow.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\debug.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FastDelegate.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\HashTable.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\icstr.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\itable.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\mathsse.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\particular_alloc.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\tcontainer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\utility.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="_g.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="base64.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="cstr_pool.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="MD5.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="serialization.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="table.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\crc32.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\deflate.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inffast.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inffixed.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inflate.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inftrees.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\trees.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zconf.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zlib.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zutil.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="_g.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="base64.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="cstr.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="cstr_pool.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="entry.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="MD5.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="serialization.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="table.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="utility.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\adler32.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\compress.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\crc32.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\deflate.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\infback.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inffast.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inflate.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inftrees.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\trees.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\uncompr.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\zutil.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
