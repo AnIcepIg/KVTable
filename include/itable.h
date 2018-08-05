@@ -344,6 +344,8 @@ namespace Schema
 		il bool operator!() const { return _it == invalid_table_iterator; }
 		il bool operator==(const tabit& rhs) const { return _it == rhs; }
 		il bool operator!=(const tabit& rhs) const { return _it != rhs; }
+		il bool operator==(const Iterator& rhs) const { return _it == rhs._it; }
+		il bool operator!=(const Iterator& rhs) const { return _it != rhs._it; }
 
 		il c_str		key() const { return tabit_get_key(_tab, _it); }
 		il etvaltype	type() const { return tabit_get_type(_tab, _it); }
@@ -364,9 +366,9 @@ namespace Schema
 		il int			get(float4x4& val) const { float* ret = tabit_get_float4x4(_tab, _it); if (!ret) return 0; val = float4x4(val); return 1; }
 	};
 
-	Iterator Table::begin() const { Iterator it; __empty_return(it); it._it = table_begin(_htab); return it; }
-	Iterator Table::next(Iterator& it) const { Iterator nt; __empty_return(nt); nt._it = table_next(_htab, it._it); return nt; }
-	Iterator Table::end() const { Iterator it; it._it = table_end; return it; }
+	Iterator Table::begin() const { Iterator it; __empty_return(it); it._it = table_begin(_htab); it._tab = _htab; return it; }
+	Iterator Table::next(Iterator& it) const { Iterator nt; __empty_return(nt); nt._it = table_next(_htab, it._it); nt._tab = _htab; return nt; }
+	Iterator Table::end() const { Iterator it; it._it = table_end; it._tab = _htab; return it; }
 
 	il Table CreateTable()
 	{
