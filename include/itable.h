@@ -233,7 +233,7 @@ namespace Schema
 		il Table	get(c_str name) const { Table tab; __empty_return(tab); tab._htab = table_get(_htab, name); return tab; }
 		il Table	getc(const char* name) const { return get(cstr(name)); }
 		il int		get(c_str name, int def) const { __empty_return(def); return table_get_integer(_htab, name, def); }
-		il int		getc(const char* name, int def) const { get(cstr(name), def); }
+		il int		getc(const char* name, int def) const { return get(cstr(name), def); }
 		il int		getInteger(c_str name) const { return get(name, 0); }
 		il int		getcInteger(const char* name) const { return getInteger(cstr(name)); }
 		il float	get(c_str name, float def) const { __empty_return(def); return table_get_float(_htab, name, def); }
