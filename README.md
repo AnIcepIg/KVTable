@@ -4,7 +4,7 @@ a key-value pair container in runtime
 a memory database
 a data-driven pattern data structure
 ```
-## Create a new table
+## create a new table
 ```cpp
 #include "itable.h"   // kvtable interface header file  
 Schema::Table tab = Schema::CreateTable();  // create an empty table
@@ -39,4 +39,36 @@ tabReal.getcDouble("double");
 tabStr = tab.get(cstr("string"));
 tabStr.getStr(strString);
 tabStr.getCstr(strCStr);
+```
+## travel table
+```cpp
+int Travel(Schema::Table tab)
+{
+	for (Schema::Iterator it = tab.begin(); it != tab.end(); it = tab.next(it))
+	{
+		printf("key = %s, value = ", it.key());
+		etvaltype typ = it.type();
+		switch (typ)
+		{
+		case etvt_reserved: printf("null\n"); break;
+		case etvt_ptr: printf("0x%I64x\n", (uint64)(ULONG_PTR)it.getPtr()); break;
+		case etvt_int: printf("%d\n", it.getInteger()); break;
+		case etvt_uint: printf("%u\n", it.getUint()); break;
+		case etvt_int64: printf("%lld\n", it.getInt64()); break;
+		case etvt_uint64: printf("%I64u\n", it.getUint64()); break;
+		case etvt_float: printf("%f\n", it.getFloat()); break;
+		case etvt_double: printf("%lf\n", it.getDouble()); break;
+		case etvt_float2:
+		case etvt_float3:
+		case etvt_float4: break;
+		case etvt_cstr: printf("%s\n", it.getCstr()); break;
+		case etvt_reference: break;
+		case etvt_table: Travel(it.getTable()); break;
+		case etvt_string: printf("%s\n", it.getString()); break;
+		case etvt_float4x4: break;
+		case etvt_userdata: break;
+		}
+	}
+	return true;
+}
 ```
