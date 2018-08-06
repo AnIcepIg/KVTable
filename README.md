@@ -72,3 +72,33 @@ int Travel(Schema::Table tab)
 	return true;
 }
 ```
+## internal special data type
+  ### float2,3,4 and float matrix
+  ```cpp
+  Schema::Table tabMath = tab.setc("math");
+  Schema::float2 f2(0, 3.14f);
+  Schema::float3 f3(1.f, 2.f, 3.f);
+  Schema::float4 f4(0, 0, 0, 1.f);
+  Schema::float4x4 f4x4;
+  tabMath.setc("float2", f2);
+  tabMath.setc("float3", f3);
+  tabMath.setc("float4", f4);
+  tabMath.setc("float4x4", f4x4);
+  
+  tabMath.getc("float2", f2);
+  tabMath.getc("float3", f3);
+  tabMath.getc("float4", f4);
+  tabMath.getc("float4x4", f4x4);
+  ```
+  ### userdata
+  ```cpp
+  struct _st { int a; float b; };
+  _st st = { 1, 3.14f };
+  Schema::Table tabUserdata = tab.setc("userdata");
+  tabUserdata.setcUserdata("userdata", &st, sizeof(_st));
+  st.a = 2; st.b = 0;
+  tabUserdata.setcUserdata("userdata2", &st, sizeof(_st));
+  
+  tabUserdata.getcUserdata("userdata", &st, sizeof(_st));
+  tabUserdata.getcUserdata("userdata2", &st, sizeof(_st));
+  ```
