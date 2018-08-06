@@ -1,6 +1,9 @@
 # KVTable
+```
 a key-value pair container in runtime
-
+a memory database
+a data-driven pattern data structure
+```
 ## Create a new table
 ```cpp
 #include "itable.h"   // kvtable interface header file  
