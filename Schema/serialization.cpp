@@ -514,8 +514,8 @@ inline int _ttAddUserdata(tabt* ptabt, void* ud, unsigned len)
 		if (!buff) break;
 		memset(buff, 0, size);
 		strcpy_s(buff, size, _USERDATA_PREFIX);
-		base64_encode((const char*)ud, len, buff + strlen(_USERDATA_PREFIX));
-		len = (unsigned)strlen(buff);
+		len = base64_encode((const char*)ud, len, buff + strlen(_USERDATA_PREFIX));
+		len += (unsigned)strlen(_USERDATA_PREFIX);
 		if (!_ttAppend(ptabt, buff, len)) break;
 		if (ptabt->_pretty) { if (!_ttAppend(ptabt, _ttLineEnd, _ttLineEndLen)) break; }
 		rst = true;
@@ -898,13 +898,12 @@ ttrd	tabtxt_read(const char* filename)
 	{
 		unsigned len = _flength(hf);
 		if (len == 0) break;
-		len += 1;
-		buff = (char*)malloc(len);
+		buff = (char*)malloc(len + 1);
 		if (!buff) break;
 		_fread(hf, buff, len);
 		buff[len] = EOF;
 		td._addr = buff;
-		td._size = len;
+		td._size = len + 1;
 		flag = true;
 	} while (0);
 	if (!flag)
@@ -1000,10 +999,8 @@ unsigned _tab2tabb(__table* ptab, __table_bin* ptabb)
 		c_str key = pair->_key;
 		unsigned len = cstr_len(key) + 1;
 		_tbAppend(key, len);
-		size += len;
 		etvaltype vt = (etvaltype)pair->_cm.vt;
 		_tbAppend(&vt, sizeof(uint8));
-		size += sizeof(uint8);
 		switch (vt)
 		{
 		case etvt_reserved: break;
@@ -1021,9 +1018,8 @@ unsigned _tab2tabb(__table* ptab, __table_bin* ptabb)
 		case etvt_reference:
 			if (ptabb->_refs.find(pair->_ptr) != ptabb->_refs.end())
 			{
-				int val = -1;
-				_tbAppend(&val, sizeof(int));
-				size += sizeof(int);
+				unsigned val = -1;
+				_tbAppend(&val, sizeof(unsigned));
 				break;
 			}
 		case etvt_table:
@@ -1041,29 +1037,96 @@ unsigned _tab2tabb(__table* ptab, __table_bin* ptabb)
 			const char* str = (const char*)pair->_ptr;
 			len = (unsigned)strlen(str) + 1;
 			_tbAppend(str, len);
-			size += len;
 		}
 			break;
 		case etvt_float4x4:
 		{
 			Schema::float4x4* f4x4 = (Schema::float4x4*)pair->_ptr;
 			_tbAppend(f4x4->ptr(), sizeof(Schema::float4x4));
-			size += sizeof(Schema::float4x4);
 		}
 			break;
-		case etvt_userdata: _tbAppend(pair->_userdata.ptr, pair->_userdata.size); break;
-		default: break;
+		case etvt_userdata: 
+			_tbAppend(&pair->_userdata.size, sizeof(unsigned));
+			_tbAppend(pair->_userdata.ptr, pair->_userdata.size); 
+			break;
 		}
 	}
 	return size;
 }
+
+#define _tbParseValue(t, fn)	{ t val = *(t*)(buff + offset); offset += sizeof(t); fn(ptab, skey, val, 0); }
+#define _tbParseVector(t, fn)	{ float* arr = (float*)(buff + offset); offset += sizeof(t); fn(ptab, skey, arr, 0); }
 
 int _tbParse(__table* ptab, byte* buff, unsigned len)
 {
 	unsigned offset = 0;
 	while (offset < len)
 	{
-
+		const char* key = (const char*)(buff + offset);
+		unsigned size = 0;
+		while (size + offset < len && key[size]) size++;
+		if (size + offset == len || size == 0) return false;
+		c_str skey = cstr_string(key);
+		offset += len + 1;
+		size = *(uint8*)(buff + offset);
+		offset += sizeof(uint8);
+		etvaltype vt = (etvaltype)size;
+		switch (vt)
+		{
+		case etvt_reserved: table_reserve(ptab, skey); break;
+		case etvt_ptr: _tbParseValue(void*, table_set_ptr); break;
+		case etvt_int: _tbParseValue(int, table_set_integer); break;
+		case etvt_uint: _tbParseValue(uint, table_set_uint); break;
+		case etvt_int64: _tbParseValue(int64, table_set_int64); break;
+		case etvt_uint64: _tbParseValue(uint64, table_set_uint64); break;
+		case etvt_float: _tbParseValue(float, table_set_float); break;
+		case etvt_double: _tbParseValue(double, table_set_double); break;
+		case etvt_float2: _tbParseVector(Schema::float2, table_set_float2); break;
+		case etvt_float3: _tbParseVector(Schema::float3, table_set_float3); break;
+		case etvt_float4: _tbParseVector(Schema::float4, table_set_float4); break;
+		case etvt_cstr:
+		{
+			size = 0;
+			const char* val = (const char*)(buff + offset);
+			while (size + offset < len && val[size]) size++;
+			if (size + offset == len) return false;
+			offset += size + 1;
+			c_str sval = cstr_string(val);
+			table_set_cstr(ptab, skey, sval, 0);
+		}
+			break;
+		case etvt_reference:
+		case etvt_table:
+		{
+			size = *(unsigned*)(buff + offset);
+			offset += sizeof(unsigned);
+			if (size == -1) break;
+			__table* psub = (__table*)table_set(ptab, skey, 0);
+			if (!psub) return false;
+			if (!_tbParse(psub, buff + offset, size)) return false;
+			offset += size;
+		}
+			break;
+		case etvt_string:
+		{
+			size = 0;
+			const char* val = (const char*)(buff + offset);
+			while (size + offset < len && val[size]) size++;
+			if (size + offset == len) return false;
+			offset += size + 1;
+			table_set_string(ptab, skey, val, 0);
+		}
+			break;
+		case etvt_float4x4: _tbParseVector(Schema::float4x4, table_set_float4x4); break;
+		case etvt_userdata:
+		{
+			size = *(unsigned*)(buff + offset);
+			offset += sizeof(unsigned);
+			table_set_userdata(ptab, skey, buff + offset, size, 0);
+			offset += size;
+		}
+			break;
+		}
 	}
 	return true;
 }
@@ -1148,25 +1211,36 @@ ttrd	tabbin_read(const char* filename)
 	ttrd td = { 0 };
 	Schema::hfile hf = _fopenread(filename);
 	char* buff = nullptr;
+	char* unbuff = nullptr;
 	if (!hf) return td;
 	int flag = false;
 	do
 	{
 		unsigned len = _flength(hf);
-		if (len == 0) break;
+		if (len == 0 || len < sizeof(__table_bin_header)) break;
 		buff = (char*)malloc(len);
 		if (!buff) break;
 		_fread(hf, buff, len);
-		td._addr = buff;
-		td._size = len;
+		__table_bin_header* pheader = (__table_bin_header*)buff;
+		if (pheader->compress_length != len - sizeof(__table_bin_header)) break;
+		if (pheader->length < pheader->compress_length) break;
+		if (pheader->fcc != 'tabb') break;
+		unbuff = (char*)malloc(pheader->length);
+		if (!unbuff) break;
+		unsigned dstlen = pheader->length;
+		unsigned srclen = pheader->compress_length;
+		if (Z_OK != uncompress((Bytef*)unbuff, (uLongf*)&dstlen, (Bytef*)(buff + sizeof(__table_bin_header)), (uLong)srclen)) break;
+		td._addr = unbuff;
+		td._size = dstlen;
 		flag = true;
 	} while (0);
 	if (!flag)
 	{
-		if (buff) { free(buff); buff = 0; }
+		if (unbuff) { free(unbuff); unbuff = 0; }
 		td._addr = 0;
 		td._size = 0;
 	}
+	if (buff) { free(buff); buff = 0; }
 	if (hf) { _fclose(hf); hf = 0; }
 	return td;
 }
@@ -1181,8 +1255,37 @@ void	tabbin_free_ttrd(ttrd td)
 }
 __table*tabbin_to(ttrd td)
 {
+	if (!td._addr) return nullptr;
 	__table* ptab = (__table*)table_create();
 	if (!ptab) return nullptr;
-
+	unsigned len = *(unsigned*)td._addr;
+	if (len > td._size) { table_destroy(ptab); return nullptr; }
+	if (!_tbParse(ptab, (byte*)td._addr + sizeof(unsigned), len))
+	{
+		table_destroy(ptab);
+		return nullptr;
+	}
 	return ptab;
+}
+
+int tab_peek_type(const char* filename)
+{
+	etfiletype ftyp = etft_unknown;
+	Schema::hfile hf = _fopenread(filename);
+	if (hf)
+	{
+		unsigned len = _flength(hf);
+		if (len > 0)
+		{
+			ftyp = etft_text;
+			if (len > sizeof(__table_bin_header))
+			{
+				__table_bin_header header = { 0 };
+				_fread(hf, &header, sizeof(__table_bin_header));
+				if (header.fcc == 'tabb') ftyp = etft_binary;
+			}
+		}
+		_fclose(hf);
+	}
+	return (int)ftyp;
 }

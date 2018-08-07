@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{3781D5B2-AB88-4F9B-B50C-B2CFE4B55E03}</ProjectGuid>
+    <ProjectGuid>{DEE7D958-1C09-4428-997A-249802DB9A42}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>KVTableBasicDemo</RootNamespace>
+    <RootNamespace>KVTableSerialiseDemo</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -162,7 +162,7 @@ copy $(OutDir)$(TargetName).pdb ..\product</Command>
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="KVTableBasicDemo.cpp" />
+    <ClCompile Include="KVTableSerialiseDemo.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

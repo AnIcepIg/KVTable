@@ -22,6 +22,8 @@ typedef struct __table_read_data {
 	unsigned _size;
 }ttrd;
 
+int tab_peek_type(const char* filename);
+
 htabtxt tabtxt_from(__table* ptab, int pretty);
 ttrd	tabtxt_read(const char* filename);		// append EOF at the end of buff
 void	tabtxt_free(htabtxt htt);

@@ -140,11 +140,19 @@ extern "C" {
 	 */
 	dxt int			table_lexicographical(htable htab, int enable);
 
-	/*
-	 *	table <=> json format serialization
-	 */
+	
+	enum etfiletype
+	{
+		etft_unknown = 0,
+		etft_text,		// readable text file format
+		etft_binary,	// binary file format
+	};
 	dxt htable		table_read(const char* filename);
-	dxt int			table_save(htable htab, const char* filename, int pretty);
+	/*
+	 *	argument 'pretty' is used when file type = etft_text
+	 *	pretty means text file with multiple lines and indent with '\t'
+	 */
+	dxt int			table_save(htable htab, const char* filename, etfiletype ftyp, int pretty);
 
 	dxt tabit		table_begin(htable htab);
 	dxt tabit		table_next(htable htab, tabit it);
@@ -282,7 +290,7 @@ namespace Schema
 		il int		resetc(const char* name, etcallback cb = etc_enable) { return reset(cstr(name), cb); }
 		il int		setLexicographical(int enable) { __empty_return(0); return table_lexicographical(_htab, enable); }
 
-		il int		save(const char* filename, int pretty) { __empty_return(0); return table_save(_htab, filename, pretty); }
+		il int		save(const char* filename, etfiletype ftyp, int pretty) { __empty_return(0); return table_save(_htab, filename, ftyp, pretty); }
 
 		il Iterator begin() const;
 		il Iterator next(Iterator& it) const;

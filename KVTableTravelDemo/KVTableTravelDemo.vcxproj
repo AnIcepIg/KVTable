@@ -97,9 +97,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>md ..\lib
-md ..\product
-copy $(OutDir)$(TargetName).lib ..\lib
+      <Command>md ..\product
 copy $(OutDir)$(TargetName).exe ..\product
 copy $(OutDir)$(TargetName).pdb ..\product</Command>
     </PostBuildEvent>
@@ -154,9 +152,7 @@ copy $(OutDir)$(TargetName).pdb ..\product</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>md ..\lib
-md ..\product
-copy $(OutDir)$(TargetName).lib ..\lib
+      <Command>md ..\product
 copy $(OutDir)$(TargetName).exe ..\product
 copy $(OutDir)$(TargetName).pdb ..\product</Command>
     </PostBuildEvent>

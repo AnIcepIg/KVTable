@@ -896,23 +896,62 @@ extern "C"
 
 	dxt htable	table_read(const char* filename)
 	{
-		ttrd td = tabtxt_read(filename);
-		if (td._addr == nullptr) return nullptr;
-		__table* ptab = tabtxt_to(td);
-		tabtxt_free_ttrd(td);
-		return ptab;
+		etfiletype ftyp = (etfiletype)tab_peek_type(filename);
+		switch (ftyp)
+		{
+		case etft_unknown:
+			return nullptr;
+		case etft_text:
+		{
+			ttrd td = tabtxt_read(filename);
+			if (td._addr == nullptr) return nullptr;
+			__table* ptab = tabtxt_to(td);
+			tabtxt_free_ttrd(td);
+			return ptab;
+		}
+		case etft_binary:
+		{
+			ttrd td = tabbin_read(filename);
+			if (td._addr == nullptr) return nullptr;
+			__table* ptab = tabbin_to(td);
+			tabbin_free_ttrd(td);
+			return ptab;
+		}
+		}
+		return nullptr;
 	}
-	dxt int		table_save(htable htab, const char* filename, int pretty)
+	dxt int		table_save(htable htab, const char* filename, etfiletype ftyp, int pretty)
 	{
 		_convert();
-		htabtxt htt = tabtxt_from(ptab, pretty);
-		if (!htt) return false;
-		if (!tabtxt_save(htt, filename))
+		switch (ftyp)
 		{
-			tabtxt_free(htt);
+		case etft_unknown:
 			return false;
+		case etft_text:
+		{
+			htabtxt htt = tabtxt_from(ptab, pretty);
+			if (!htt) return false;
+			if (!tabtxt_save(htt, filename))
+			{
+				tabtxt_free(htt);
+				return false;
+			}
+			tabtxt_free(htt);
 		}
-		tabtxt_free(htt);
+			break;
+		case etft_binary:
+		{
+			htabbin htb = tabbin_from(ptab);
+			if (!htb) return false;
+			if (!tabbin_save(htb, filename))
+			{
+				tabbin_free(htb);
+				return false;
+			}
+			tabbin_free(htb);
+		}
+			break;
+		}
 		return true;
 	}
 
