@@ -474,7 +474,7 @@ inline int _ttAddUint(tabt* ptabt, unsigned u) { char buff[32]; sprintf_s(buff, 
 inline int _ttAddInt64(tabt* ptabt, int64 ll) { char buff[32]; sprintf_s(buff, _countof(buff), "L%lld", ll); return _ttAddValue(ptabt, buff); }
 inline int _ttAddUint64(tabt* ptabt, uint64 ull) { char buff[32]; sprintf_s(buff, _countof(buff), "UL%llu", ull); return _ttAddValue(ptabt, buff); }
 inline int _ttAddFloat(tabt* ptabt, float f) { char buff[64]; sprintf_s(buff, _countof(buff), "F%f", f); return _ttAddValue(ptabt, buff); }
-inline int _ttAddDouble(tabt* ptabt, double d) { char buff[128]; sprintf_s(buff, _countof(buff), "D%lf", d); return _ttAddValue(ptabt, buff); }
+inline int _ttAddDouble(tabt* ptabt, double d) { char buff[128]; sprintf_s(buff, _countof(buff), "D%.12lf", d); return _ttAddValue(ptabt, buff); }
 inline int _ttAddFloat2(tabt* ptabt, Schema::float2& f2) { char buff[128]; sprintf_s(buff, _countof(buff), "<float2>%f,%f", f2.x, f2.y); return _ttAddValue(ptabt, buff); }
 inline int _ttAddFloat3(tabt* ptabt, Schema::float3& f3) { char buff[256]; sprintf_s(buff, _countof(buff), "<float3>%f,%f,%f", f3.x, f3.y, f3.z); return _ttAddValue(ptabt, buff); }
 inline int _ttAddFloat4(tabt* ptabt, Schema::float4& f4) { char buff[256]; sprintf_s(buff, _countof(buff), "<float4>%f,%f,%f,%f", f4.x, f4.y, f4.z, f4.w); return _ttAddValue(ptabt, buff); }
@@ -692,7 +692,7 @@ inline int _ttParseString(const char* str, unsigned len, __table* ptab, c_str ke
 			if (_ttIsNumeric(ch)) cnt++;
 			else break;
 		}
-		if (cnt == 0 || cnt > 19) return false;
+		if (cnt == 0 || cnt > 20) return false;
 		memcpy(buff, str + 2, cnt);
 		buff[cnt] = 0;
 		uint64 val = 0;
@@ -814,8 +814,8 @@ inline int _ttParseString(const char* str, unsigned len, __table* ptab, c_str ke
 			else break;
 		}
 		if (cnt == 0) return false;
-		unsigned size = BASE64_DECODE_OUT_SIZE(cnt);
-		if (size == 0) return false;
+		//unsigned size = BASE64_DECODE_OUT_SIZE(cnt);
+		unsigned size = cnt;
 		char* ud = (char*)malloc(size);
 		if (!ud) return false;
 		size = base64_decode(str + 10, cnt, ud);
@@ -846,7 +846,8 @@ const char* _ttParse(const char* buff, __table* ptab)
 		_ttRead('\"', len); ++buff;
 		if (len == 0) return nullptr;
 		c_str skey = cstr_stringl(str, len);
-		_ttRead('=', len); ++buff; _ttRead(' ', len); ++buff; _ttTrim();
+		_ttRead('=', len); ++buff;
+		_ttTrim();
 		if (ch == '{')
 		{
 			ch = *(++buff);
@@ -1067,7 +1068,7 @@ int _tbParse(__table* ptab, byte* buff, unsigned len)
 		while (size + offset < len && key[size]) size++;
 		if (size + offset == len || size == 0) return false;
 		c_str skey = cstr_string(key);
-		offset += len + 1;
+		offset += size + 1;
 		size = *(uint8*)(buff + offset);
 		offset += sizeof(uint8);
 		etvaltype vt = (etvaltype)size;
