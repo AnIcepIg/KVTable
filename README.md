@@ -5,11 +5,13 @@ a memory database
 a data-driven pattern data structure
 ```
 ## create a new table
+KVTableBasicDemo gives you more details
 ```cpp
 #include "itable.h"   // kvtable interface header file  
 Schema::Table tab = Schema::CreateTable();  // create an empty table
 ```
-## add new pairs into table
+## add new elements into table
+KVTableBasicDemo gives you more details
 ```cpp
 // Note that all keys stored in tables are in string pool, thus you need to put them into pool by call 'cstr' interface, see icstr.h
 // But table interface also provides a convenise way to index by instant 'const char*', that is functions with 'c' version like gets/sets
@@ -27,7 +29,8 @@ c_str strCStr = cstr_string("cstr");
 tabStr.setStr(strString, "i'm a string");
 tabStr.setCstr(strCStr, cstr("i'm a const string in string pool"));
 ```
-## get stuff from table
+## get stuffs from table
+KVTableBasicDemo gives you more details
 ```cpp
 tab.getc("integer", 0);
 tab.get(cstr("unsigned int"), 0u);
@@ -41,6 +44,7 @@ tabStr.getStr(strString);
 tabStr.getCstr(strCStr);
 ```
 ## travel table
+KVTableTravelDemo gives you more details
 ```cpp
 int Travel(Schema::Table tab)
 {
@@ -73,6 +77,7 @@ int Travel(Schema::Table tab)
 }
 ```
 ## internal special data type
+KVTableBasicDemo gives you more details
   ### float2,3,4 and float matrix
   ```cpp
   Schema::Table tabMath = tab.setc("math");
@@ -102,3 +107,19 @@ int Travel(Schema::Table tab)
   tabUserdata.getcUserdata("userdata", &st, sizeof(_st));
   tabUserdata.getcUserdata("userdata2", &st, sizeof(_st));
   ```
+## serialization
+KVTableSerialiseDemo gives you more details
+```cpp
+tab.save("tab_text.tab.txt", etft_text, false);		// save as readable text file
+tab.save("tab_text_pretty.tab.txt", etft_text, true);	// save as readable text file with mutilple lines and indent
+tab.save("tab_bin.tab", etft_binary, 0);		// save as a binary file with 'zlib' compress
+
+Schema::DestroyTable(tab);
+
+tab = Schema::OpenTableFile("tab_text.tab.txt");
+Schema::DestroyTable(tab);
+tab = Schema::OpenTableFile("tab_text_pretty.tab.txt");
+Schema::DestroyTable(tab);
+tab = Schema::OpenTableFile("tab_bin.tab");
+Schema::DestroyTable(tab);
+```
