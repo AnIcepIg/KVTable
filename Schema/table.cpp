@@ -397,6 +397,43 @@ __pair* __table::set_disorder(c_str name)
 	return pair;
 }
 
+unsigned __table::getIdx(c_str name)
+{
+	if (_cm.lexicographical)
+		return getIdx_lexicographical(name);
+	return getIdx_disorder(name);
+}
+
+unsigned __table::getIdx_lexicographical(c_str name)
+{
+	int left = 0, right = (int)_count - 1, middle = 0;
+	c_str result = 0;
+	while (left <= right)
+	{
+		middle = (left + right) >> 1;
+		result = (*(_elements + middle))->_key;
+		if (result == name)
+		{
+			return (unsigned)middle;
+		}
+		if (result < name)
+			left = middle + 1;
+		else
+			right = middle - 1;
+	}
+	return invalid_table_iterator;
+}
+
+unsigned __table::getIdx_disorder(c_str name)
+{
+	for (unsigned i = 0; i < _count; ++i)
+	{
+		if (name == _elements[i]->_key)
+			return i;
+	}
+	return invalid_table_iterator;
+}
+
 __pair* __table::get(c_str name)
 {
 	if (_cm.lexicographical)
@@ -968,6 +1005,7 @@ extern "C"
 		if (it >= ptab->_count) return invalid_table_iterator;
 		return it;
 	}
+	dxt tabit table_get_element(htable htab, c_str name) { _convert(); return ptab->getIdx(name); }
 
 	dxt delegate3* table_reg_global(htable htab) { _convert(); return ptab->reg(); }
 	dxt delegate3* table_reg_element(htable htab, c_str name) { _convert(); return ptab->reg(name); }

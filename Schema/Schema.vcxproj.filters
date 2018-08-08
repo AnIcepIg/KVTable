@@ -96,6 +96,9 @@
     <ClInclude Include="..\include\schema.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="tql.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="_g.cpp">
@@ -157,6 +160,9 @@
     </ClCompile>
     <ClCompile Include="zlib\zutil.c">
       <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="tql.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -140,6 +140,16 @@ extern "C" {
 	 */
 	dxt int			table_lexicographical(htable htab, int enable);
 
+	/*
+	 *	TQL(table query language)
+	 *	protocol data exchange language which can be used by others to query/modify table data
+	 *	e.g.	"get [table_name]...[key_name]" will return the result you want
+	 *			"set [table_name]...[key_name] = 1" will modify the key you specified
+	 *	about more details of TQL, please read "TQL.txt"
+	 */
+	dxt int	tql_query(const char* q, htable htab);	// 'htab' receives result of the query 
+	dxt int	tql_update();							// call by host program that who wants active 'TQL'
+	dxt int	tql_tag(htable htab, const char* name);	// expose the specified table with 'name' that can be accessed by 'TQL'
 	
 	enum etfiletype
 	{
@@ -157,6 +167,7 @@ extern "C" {
 	dxt tabit		table_begin(htable htab);
 	dxt tabit		table_next(htable htab, tabit it);
 #define				table_end	invalid_table_iterator
+	dxt tabit		table_get_element(htable htab, c_str name);
 
 	dxt delegate3*	table_reg_global(htable htab);
 	dxt delegate3*	table_reg_element(htable htab, c_str name);
@@ -295,6 +306,11 @@ namespace Schema
 		il Iterator begin() const;
 		il Iterator next(Iterator& it) const;
 		il Iterator end() const;
+		il Iterator getElement(c_str name) const;
+		il Iterator getcElement(const char* name) const;
+
+		il int		has(c_str name);
+		il int		hasc(const char* name);
 
 		template<class X, class Y>
 		il int reg(Y *pthis, int(X::* func)(etopstatus, Table, c_str))
@@ -385,29 +401,19 @@ namespace Schema
 	Iterator Table::begin() const { Iterator it; __empty_return(it); it._it = table_begin(_htab); it._tab = _htab; return it; }
 	Iterator Table::next(Iterator& it) const { Iterator nt; __empty_return(nt); nt._it = table_next(_htab, it._it); nt._tab = _htab; return nt; }
 	Iterator Table::end() const { Iterator it; it._it = table_end; it._tab = _htab; return it; }
+	Iterator Table::getElement(c_str name) const { Iterator it; it._it = table_get_element(_htab, name); it._tab = _htab; return it; }
+	Iterator Table::getcElement(const char* name) const { return getElement(cstr(name)); }
 
-	il Table CreateTable()
-	{
-		Table tab;
-		tab._htab = table_create();
-		return tab;
-	}
+	int		Table::has(c_str name) { __empty_return(false); return !!getElement(name); }
+	int		Table::hasc(const char* name) { __empty_return(false); return !!getcElement(name); }
 
-	il void DestroyTable(Table& tab)
-	{
-		if (tab._htab)
-		{
-			table_destroy(tab._htab);
-			tab._htab = invalid_table_handle;
-		}
-	}
+	il Table CreateTable() { Table tab; tab._htab = table_create(); return tab; }
+	il void DestroyTable(Table& tab) { if (tab._htab) { table_destroy(tab._htab); tab._htab = invalid_table_handle; } }
+	il Table OpenTableFile(const char* filename) { Table tab; tab._htab = table_read(filename); return tab; }
 
-	il Table OpenTableFile(const char* filename)
-	{
-		Table tab;
-		tab._htab = table_read(filename);
-		return tab;
-	}
+	il int TQL(const char* query, Table tab) { return tql_query(query, tab._htab); }
+	il int TQLUpdate() { return tql_update(); }
+	il int TQLTag(const char* name, Table tab) { return tql_tag(tab._htab, name); }
 
 	typedef void*	hfile;
 	typedef hfile(*file_open_read)(const char* filename);

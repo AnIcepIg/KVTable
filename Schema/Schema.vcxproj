@@ -172,6 +172,7 @@ copy $(OutDir)$(TargetName).pdb ..\product</Command>
     <ClInclude Include="MD5.h" />
     <ClInclude Include="serialization.h" />
     <ClInclude Include="table.h" />
+    <ClInclude Include="tql.h" />
     <ClInclude Include="zlib\crc32.h" />
     <ClInclude Include="zlib\deflate.h" />
     <ClInclude Include="zlib\inffast.h" />
@@ -192,6 +193,7 @@ copy $(OutDir)$(TargetName).pdb ..\product</Command>
     <ClCompile Include="MD5.cpp" />
     <ClCompile Include="serialization.cpp" />
     <ClCompile Include="table.cpp" />
+    <ClCompile Include="tql.cpp" />
     <ClCompile Include="utility.cpp" />
     <ClCompile Include="zlib\adler32.c" />
     <ClCompile Include="zlib\compress.c" />

@@ -133,6 +133,10 @@ struct __table
 	il __pair* get_disorder(c_str name);
 	il __pair* get_lexicographical(c_str name);
 
+	il unsigned getIdx(c_str name);
+	il unsigned getIdx_disorder(c_str name);
+	il unsigned getIdx_lexicographical(c_str name);
+
 	il int erase_disorder(c_str name);
 	il int erase_lexicographical(c_str name);
 

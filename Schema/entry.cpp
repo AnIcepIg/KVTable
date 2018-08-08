@@ -2,6 +2,7 @@
 #include "cstr_pool.h"
 #include "table.h"
 #include "_g.h"
+#include "tql.h"
 
 using namespace Schema;
 
@@ -63,6 +64,12 @@ public:
 	}
 	~_Global()
 	{
+		if (__tabtql)
+		{
+			table_destroy(__tabtql);
+			__tabtql = nullptr;
+		}
+
 		if (__delegatesalloc)
 		{
 			delete __delegatesalloc;
