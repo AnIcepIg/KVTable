@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KVTableTravelDemo", "KVTabl
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KVTableSerialiseDemo", "KVTableSerialiseDemo\KVTableSerialiseDemo.vcxproj", "{DEE7D958-1C09-4428-997A-249802DB9A42}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KVTableDataTriggerDemo", "KVTableDataTriggerDemo\KVTableDataTriggerDemo.vcxproj", "{3CA73921-69E5-4E4B-9246-2EFF393C0CA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +53,14 @@ Global
 		{DEE7D958-1C09-4428-997A-249802DB9A42}.Release|x64.Build.0 = Release|x64
 		{DEE7D958-1C09-4428-997A-249802DB9A42}.Release|x86.ActiveCfg = Release|Win32
 		{DEE7D958-1C09-4428-997A-249802DB9A42}.Release|x86.Build.0 = Release|Win32
+		{3CA73921-69E5-4E4B-9246-2EFF393C0CA0}.Debug|x64.ActiveCfg = Debug|x64
+		{3CA73921-69E5-4E4B-9246-2EFF393C0CA0}.Debug|x64.Build.0 = Debug|x64
+		{3CA73921-69E5-4E4B-9246-2EFF393C0CA0}.Debug|x86.ActiveCfg = Debug|Win32
+		{3CA73921-69E5-4E4B-9246-2EFF393C0CA0}.Debug|x86.Build.0 = Debug|Win32
+		{3CA73921-69E5-4E4B-9246-2EFF393C0CA0}.Release|x64.ActiveCfg = Release|x64
+		{3CA73921-69E5-4E4B-9246-2EFF393C0CA0}.Release|x64.Build.0 = Release|x64
+		{3CA73921-69E5-4E4B-9246-2EFF393C0CA0}.Release|x86.ActiveCfg = Release|Win32
+		{3CA73921-69E5-4E4B-9246-2EFF393C0CA0}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

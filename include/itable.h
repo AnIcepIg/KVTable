@@ -312,6 +312,14 @@ namespace Schema
 			delegate3 dlgt(pthis, func);
 			return table_unreg_global(_htab, &dlgt);
 		}
+		il int reg(int(*func)(etopstatus, Table, c_str)) { __empty_return(false); delegate3* pdlgt = table_reg_global(_htab); if (!pdlgt) return false; pdlgt->bind(func); return true; }
+		il int unreg(int(*func)(etopstatus, Table, c_str)) { __empty_return(false); delegate3 dlgt(func); table_unreg_global(_htab, &dlgt); return true; }
+		il int reg(c_str name, int(*func)(etopstatus, Table, c_str)) { __empty_return(false); delegate3* pdlgt = table_reg_element(_htab, name); if (!pdlgt) return false; pdlgt->bind(func); return true; }
+		il int regc(const char* name, int(*func)(etopstatus, Table, c_str)) { return reg(cstr(name), func); }
+		il int reserve_reg(c_str name, int(*func)(etopstatus, Table, c_str)) { __empty_return(false); if (!table_reserve(_htab, name)) return false; return reg(name, func); }
+		il int reserve_regc(const char* name, int(*func)(etopstatus, Table, c_str)) { return reserve_reg(cstr(name), func); }
+		il int unreg(c_str name, int(*func)(etopstatus, Table, c_str)) { __empty_return(false); delegate3 dlgt(func); table_unreg_element(_htab, name, &dlgt); return true; }
+		il int unregc(const char* name, int(*func)(etopstatus, Table, c_str)) { return unreg(cstr(name), func); }
 		template<class X, class Y>
 		il int reg(c_str name, Y *pthis, int(X::* func)(etopstatus, Table, c_str))
 		{
