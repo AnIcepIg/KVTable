@@ -155,7 +155,29 @@ void __pair::df4x4(Schema::float4x4* ptr)
 	__f4x4alloc->free(ptr);
 }
 
+#include <unordered_map>
+#include <unordered_set>
 
+template<typename T>
+struct _TabHash {
+	il size_t operator()(const T& val) const {
+		static const size_t shift = (size_t)log2(1 + sizeof(T));
+		return (size_t)(val) >> shift;
+	}
+};
+typedef std::unordered_set<void*, _TabHash<void*>>		TableUSet;
+static TableUSet _tabuset;
+static Spin _spintabuset;
+
+dxt int	table_validate(htable htab)
+{
+	__table* ptab = (__table*)htab;
+	if (!ptab) return false;
+	_spintabuset.lock();
+	if (_tabuset.find(ptab) != _tabuset.end()) { _spintabuset.unlock(); return true; }
+	_spintabuset.unlock();
+	return false;
+}
 
 __table::__table()
 	: _mask(0)
@@ -196,11 +218,20 @@ __table* __table::create()
 	__table* ptr = __taballoc->alloc(bum);
 	if (!ptr) return nullptr;
 	ptr->_cm.bum = bum;
+
+	_spintabuset.lock();
+	_tabuset.insert(ptr);
+	_spintabuset.unlock();
+
 	return ptr;
 }
 
 void __table::destroy(__table* ptab)
 {
+	_spintabuset.lock();
+	_tabuset.erase(ptab);
+	_spintabuset.unlock();
+
 	__taballoc->free(ptab, ptab->_cm.bum);
 }
 

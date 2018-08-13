@@ -140,6 +140,8 @@ extern "C" {
 	 */
 	dxt int			table_lexicographical(htable htab, int enable);
 
+	dxt int			table_validate(htable htab);
+
 	/*
 	 *	TQL(table query language)
 	 *	protocol data exchange language which can be used by others to query/modify table data

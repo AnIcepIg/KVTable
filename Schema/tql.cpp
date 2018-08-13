@@ -5,6 +5,7 @@ extern __table* __tabtql = nullptr;
 
 dxt int	tql_query(const char* q, htable htab)
 {
+
 	return true;
 }
 dxt int	tql_update()

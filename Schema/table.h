@@ -157,8 +157,3 @@ extern Schema::file_close _fclose;
 extern Schema::file_length _flength;
 extern Schema::file_read _fread;
 extern Schema::file_write _fwrite;
-
-struct __iterator
-{
-
-};
