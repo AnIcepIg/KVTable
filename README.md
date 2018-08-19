@@ -12,6 +12,7 @@ a data-driven pattern data structure
 * [Travel Table](#travel-table)
 * [Internal Special Data Type](#internal-special-data-type)
 * [Serialization](#serialization)
+* [Data Trigger/Delegate/Observer](#data-trigger/delegate/observer)
 
 ## create a new table
 KVTableBasicDemo gives you more details
@@ -132,3 +133,8 @@ Schema::DestroyTable(tab);
 tab = Schema::OpenTableFile("tab_bin.tab");
 Schema::DestroyTable(tab);
 ```
+## data trigger/delegate/observer
+KVTableDataTriggerDemo gives you more details
+Data trigger feature is the first important fundamental function in 'Data-Driven' model.
+In KVTable you can register one or more callback(s) for table or specified element in table in case any modification occured, those callbacks will be called.
+Callbacks can be global functions, member functions in class or vitual functions.
