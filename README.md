@@ -135,6 +135,8 @@ Schema::DestroyTable(tab);
 ```
 ## data trigger/delegate/observer
 KVTableDataTriggerDemo gives you more details
+```
 Data trigger feature is the first important fundamental function in 'Data-Driven' model.
 In KVTable you can register one or more callback(s) for table or specified element in table in case any modification occured, those callbacks will be called.
 Callbacks can be global functions, member functions in class or vitual functions.
+```
