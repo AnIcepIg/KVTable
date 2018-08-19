@@ -140,3 +140,17 @@ Data trigger feature is the first important fundamental function in 'Data-Driven
 In KVTable you can register one or more callback(s) for table or specified element in table in case any modification occured, those callbacks will be called.
 Callbacks can be global functions, member functions in class or vitual functions.
 ```
+```cpp
+int OnTableChanged(etopstatus ops, Schema::Table tab, c_str name); // global callback
+
+struct ITrigger
+{
+	virtual int OnVirtualTrigger(etopstatus ops, Schema::Table tab, c_str name) = 0; // vitual callback
+};
+
+class Trigger : public ITrigger
+{
+	virtual int OnVirtualTrigger(etopstatus ops, Schema::Table tab, c_str name); // vitual callback
+	int OnClassTrigger(etopstatus ops, Schema::Table tab, c_str name); // member callback
+};	
+```
