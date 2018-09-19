@@ -64,11 +64,7 @@ public:
 	}
 	~_Global()
 	{
-		if (__tabtql)
-		{
-			table_destroy(__tabtql);
-			__tabtql = nullptr;
-		}
+		tql_uninitialize();
 
 		if (__delegatesalloc)
 		{

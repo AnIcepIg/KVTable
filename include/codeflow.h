@@ -104,3 +104,11 @@ do										\
 #ifndef COM_SUCCESS_BREAK
 #define COM_SUCCESS_BREAK(code)				if (SUCCEEDED(code)) break
 #endif
+
+#ifndef SAFE_FREE
+#define SAFE_FREE(ptr)		if (ptr) { free(ptr); ptr = nullptr; }
+#endif
+
+#ifndef SAFE_DELETE
+#define SAFE_DELETE(ptr)	if (ptr) { delete(ptr); ptr = nullptr; }
+#endif
