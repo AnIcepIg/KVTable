@@ -81,7 +81,7 @@ extern "C" {
 	 */
 	typedef FastDelegate3<etopstatus, Schema::Table, c_str, int>	delegate3;
 
-#define dxt		__declspec(dllexport)
+#define dxt		extern "C" __declspec(dllexport)
 #define il		inline
 
 	dxt htable	table_create();
