@@ -478,6 +478,7 @@ inline int _ttAddDouble(tabt* ptabt, double d) { char buff[128]; sprintf_s(buff,
 inline int _ttAddFloat2(tabt* ptabt, Schema::float2& f2) { char buff[128]; sprintf_s(buff, _countof(buff), "<float2>%f,%f", f2.x, f2.y); return _ttAddValue(ptabt, buff); }
 inline int _ttAddFloat3(tabt* ptabt, Schema::float3& f3) { char buff[256]; sprintf_s(buff, _countof(buff), "<float3>%f,%f,%f", f3.x, f3.y, f3.z); return _ttAddValue(ptabt, buff); }
 inline int _ttAddFloat4(tabt* ptabt, Schema::float4& f4) { char buff[256]; sprintf_s(buff, _countof(buff), "<float4>%f,%f,%f,%f", f4.x, f4.y, f4.z, f4.w); return _ttAddValue(ptabt, buff); }
+inline int _ttAddBool(tabt* ptabt, bool b) { if (b) return _ttAddValue(ptabt, "true"); return _ttAddValue(ptabt, "false"); }
 inline int _ttAddFloat4x4(tabt* ptabt, Schema::float4x4& f4x4)
 {
 	char buff[1024];
@@ -567,6 +568,9 @@ int _tab2tabt(__table* ptab, tabt* ptabt, int layer)
 		case etvt_float4:
 			if (!_ttAddFloat4(ptabt, pair->_f4)) return false;
 			break;
+		case etvt_bool:
+			if (!_ttAddBool(ptabt, pair->_bl)) return false;
+			break;
 		case etvt_cstr:
 			if (!_ttAddString(ptabt, pair->_str, cstr_len(pair->_str))) return false;
 			break;
@@ -615,9 +619,17 @@ inline int _ttParseString(const char* str, unsigned len, __table* ptab, c_str ke
 	register char ch1 = str[1];
 	register char ch = 0;
 	char buff[1024];
-	if (len == 4 && ch0 == 'n' && ch1 == 'u' && str[2] == 'l' && str[3] == 'l')
+	if (len >= 4 && ch0 == 'n' && ch1 == 'u' && str[2] == 'l' && str[3] == 'l')
 	{
 		table_reserve(ptab, key);
+	}
+	else if (len >= 4 && ch0 == 't' && ch1 == 'r' && str[2] == 'u' && str[3] == 'e')
+	{
+		table_set_bool(ptab, key, true, 0);
+	}
+	else if (len >= 5 && ch0 == 'f' && ch1 == 'a' && str[2] == 'l' && str[3] == 's' && str[4] == 'e')
+	{
+		table_set_bool(ptab, key, false, 0);
 	}
 	else if (ch0 == 'P')
 	{
@@ -1016,6 +1028,7 @@ unsigned _tab2tabb(__table* ptab, __table_bin* ptabb)
 		case etvt_float3: _tbAppend(pair->_f3.ptr(), sizeof(Schema::float3)); break;
 		case etvt_float4: _tbAppend(pair->_f4.ptr(), sizeof(Schema::float4)); break;
 		case etvt_cstr: _tbAppend(pair->_str, cstr_len(pair->_str) + 1); break;
+		case etvt_bool: _tbAppend(&pair->_bl, sizeof(bool)); break;
 		case etvt_reference:
 			if (ptabb->_refs.find(pair->_ptr) != ptabb->_refs.end())
 			{
@@ -1085,6 +1098,7 @@ int _tbParse(__table* ptab, byte* buff, unsigned len)
 		case etvt_float2: _tbParseVector(Schema::float2, table_set_float2); break;
 		case etvt_float3: _tbParseVector(Schema::float3, table_set_float3); break;
 		case etvt_float4: _tbParseVector(Schema::float4, table_set_float4); break;
+		case etvt_bool: _tbParseValue(bool, table_set_bool); break;
 		case etvt_cstr:
 		{
 			size = 0;

@@ -30,8 +30,9 @@ extern "C" {
 		etvt_float3,
 		etvt_float4,
 		etvt_cstr,
+		etvt_bool,
 
-		etvt_reference,
+		etvt_reference = 100,
 
 		etvt_table,
 		etvt_string,
@@ -104,6 +105,7 @@ extern "C" {
 	dxt int		table_set_float3(htable htab, c_str name, float* val, int callback);
 	dxt int		table_set_float4(htable htab, c_str name, float* val, int callback);
 	dxt int		table_set_float4x4(htable htab, c_str name, float* val, int callback);
+	dxt int		table_set_bool(htable htab, c_str name, bool val, int callback);
 
 	/*
 	 *	TODO: begin/end massive insert to an ordered table
@@ -128,6 +130,7 @@ extern "C" {
 	dxt float*		table_get_float3(htable htab, c_str name);
 	dxt float*		table_get_float4(htable htab, c_str name);
 	dxt float*		table_get_float4x4(htable htab, c_str name);
+	dxt bool		table_get_bool(htable htab, c_str name, bool def);
 
 	dxt int			table_reserve(htable htab, c_str name);	// reserve an element with empty value, if key is already existed, nothing happens
 	dxt int			table_clear(htable htab, int callback);
@@ -220,6 +223,8 @@ namespace Schema
 		il int setc(const char* name, const Table& tab, etcallback cb = etc_enable) { return set(cstr(name), tab, cb); }
 		il int set(c_str name, int val, etcallback cb = etc_enable) { __empty_return(0); return table_set_integer(_htab, name, val, cb); }
 		il int setc(const char* name, int val, etcallback cb = etc_enable) { return set(cstr(name), val, cb); }
+		il int set(c_str name, bool val, etcallback cb = etc_enable) { __empty_return(0); return table_set_bool(_htab, name, val, cb); }
+		il int setc(const char* name, bool val, etcallback cb = etc_enable) { return set(cstr(name), val, cb); }
 		il int set(c_str name, float val, etcallback cb = etc_enable) { __empty_return(0); return table_set_float(_htab, name, val, cb); }
 		il int setc(const char* name, float val, etcallback cb = etc_enable) { return set(cstr(name), val, cb); }
 		il int set(c_str name, double val, etcallback cb = etc_enable) { __empty_return(0); return table_set_double(_htab, name, val, cb); }
@@ -257,6 +262,10 @@ namespace Schema
 		il int		getc(const char* name, int def) const { return get(cstr(name), def); }
 		il int		getInteger(c_str name) const { return get(name, 0); }
 		il int		getcInteger(const char* name) const { return getInteger(cstr(name)); }
+		il bool		get(c_str name, bool def) const { __empty_return(def); return table_get_bool(_htab, name, def); }
+		il bool		getc(const char* name, bool def) const { return get(cstr(name), def); }
+		il bool		getBool(c_str name) const { return get(name, false); }
+		il bool		getcBool(const char* name) const { return getBool(cstr(name)); }
 		il float	get(c_str name, float def) const { __empty_return(def); return table_get_float(_htab, name, def); }
 		il float	getc(const char* name, float def) const { return get(cstr(name), def); }
 		il float	getFloat(c_str name) const { return get(name, 0.f); }

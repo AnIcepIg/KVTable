@@ -48,6 +48,7 @@ struct __pair
 		uint64 _u64;
 		float _flt;
 		double _dbl;
+		bool _bl;
 		struct {
 			unsigned size;
 			void* ptr;
@@ -119,6 +120,7 @@ struct __table
 	il int setf3(c_str name, float* val, int callback);
 	il int setf4(c_str name, float* val, int callback);
 	il int setf4x4(c_str name, float* val, int callback);
+	il int set(c_str name, bool val, int callback);
 
 	il __pair* set(c_str name);
 	il __pair* set_disorder(c_str name);

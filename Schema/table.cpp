@@ -561,6 +561,17 @@ int __table::set(c_str name, float val, int callback)
 	return true;
 }
 
+int __table::set(c_str name, bool val, int callback)
+{
+	__pair* pair = set(name);
+	if (!pair) return false;
+	pair->reset();
+	pair->_bl = val;
+	pair->_cm.vt = etvt_bool;
+	_callback(ets_modify);
+	return true;
+}
+
 int __table::set(c_str name, double val, int callback)
 {
 	__pair* pair = set(name);
@@ -846,6 +857,7 @@ extern "C"
 	dxt int	table_set_float3(htable htab, c_str name, float* val, int callback) { _convert(); return ptab->setf3(name, val, callback); }
 	dxt int	table_set_float4(htable htab, c_str name, float* val, int callback) { _convert(); return ptab->setf4(name, val, callback); }
 	dxt int	table_set_float4x4(htable htab, c_str name, float* val, int callback) { _convert(); return ptab->setf4x4(name, val, callback); }
+	dxt int	table_set_bool(htable htab, c_str name, bool val, int callback) { _convert(); return ptab->set(name, val, callback); }
 
 	dxt htable table_get(htable htab, c_str name)
 	{
@@ -857,6 +869,7 @@ extern "C"
 	dxt float table_get_float(htable htab, c_str name, float def) { _common_get(); if (!pair) return def; return pair->_flt; }
 	dxt double table_get_double(htable htab, c_str name, double def) { _common_get(); if (!pair) return def; return pair->_dbl; }
 	dxt int64 table_get_int64(htable htab, c_str name, int64 def) { _common_get(); if (!pair) return def; return pair->_i64; }
+	dxt bool table_get_bool(htable htab, c_str name, bool def) { _common_get(); if (!pair) return def; return pair->_bl; }
 	dxt const char* table_get_string(htable htab, c_str name)
 	{
 		_common_get();
