@@ -13,7 +13,7 @@ a data-driven pattern data structure
 * [Internal Special Data Type](#internal-special-data-type)
 * [Serialization](#serialization)
 * [Data Trigger/Delegate/Observer](#data-trigger/delegate/observer)
-* [TQL(Table Query Language)](#TQL(table query language))
+* [TQL(Table Query Language)](#table-query-language)
 
 ## create a new table
 KVTableBasicDemo gives you more details
@@ -155,4 +155,4 @@ class Trigger : public ITrigger
 	int OnClassTrigger(etopstatus ops, Schema::Table tab, c_str name); // member callback
 };	
 ```
-## TQL(table query language)
+## table query language
