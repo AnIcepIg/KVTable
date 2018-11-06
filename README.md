@@ -156,3 +156,5 @@ class Trigger : public ITrigger
 };	
 ```
 ## table query language
+:TODO
+As 'SQL', you can use TQL to query/modify data from any existed processes which use KVTable and expose any tables
