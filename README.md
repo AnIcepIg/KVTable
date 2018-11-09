@@ -3,6 +3,7 @@
 a key-value pair container in runtime
 a memory database
 a data-driven pattern data structure
+entity component system adapter
 ```
 
 ## Contents
@@ -14,6 +15,7 @@ a data-driven pattern data structure
 * [Serialization](#serialization)
 * [Data Trigger/Delegate/Observer](#data-trigger/delegate/observer)
 * [TQL(Table Query Language)](#table-query-language)
+* [TOP(Table Oriented Programming)](#table-oriented-programming)
 
 ## create a new table
 KVTableBasicDemo gives you more details
@@ -158,3 +160,6 @@ class Trigger : public ITrigger
 ## table query language
 :TODO
 As 'SQL', you can use TQL to query/modify data from any existed processes which use KVTable and expose any tables
+
+## table oriented programming
+TOP is a kind of programming pattern which absolutely sperates data and functions, like entity component system, there is no objects like 'Actor', 'Bullet', there is only data(KVTable, no functions) and system(class, no data).
